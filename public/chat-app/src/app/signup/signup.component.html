@@ -1,0 +1,72 @@
+<div class="container">
+  <p>Welcome to Chat-App</p>
+  <div>
+    <form autocomplete="off" [formGroup]="signUpForm">
+      <div class="form-holder">
+        <div class="form-group">
+          <label class="control-label form-label">First Name</label>
+          <input type="text" class="form-control form-custom" name="firstName" formControlName="firstName" [ngClass]="{'is-invalid': submitted && f.firstName.errors}"/>
+          <div *ngIf="f.firstName.errors" class="invalid-feedback">
+            <div *ngIf="f.firstName.errors.required">first Name is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label form-label">Last Name</label>
+          <input type="text" class="form-control form-custom" name="lastName" formControlName="lastName" [ngClass]="{'is-invalid': submitted && f.lastName.errors}"/>
+          <div *ngIf="f.lastName.errors" class="invalid-feedback">
+            <div *ngIf="f.lastName.errors.required">lastName is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-holder">
+        <div class="form-group">
+          <label class="control-label form-label">E-mail</label>
+          <input type="email" class="form-control form-custom" name="email" formControlName="email" [ngClass]="{'is-invalid': submitted && f.email.errors}"/>
+          <div *ngIf="f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors.required">email is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label form-label">Username</label>
+          <input type="text" class="form-control form-custom" name="username" formControlName="username" [ngClass]="{'is-invalid': submitted && f.username.errors}"/>
+          <div *ngIf="f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">username is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-holder">
+        <div class="form-group">
+          <label class="control-label form-label">Password</label>
+          <input type="password" class="form-control form-custom" name="password" formControlName="password" [ngClass]="{'is-invalid': submitted && f.password.errors}"/>
+          <div *ngIf="f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">password is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label form-label">Phone number</label>
+          <input type="text" class="form-control form-custom" name="phoneNumber" formControlName="phoneNumber" [ngClass]="{'is-invalid': submitted && f.phoneNumber.errors}"/>
+          <div *ngIf="f.phoneNumber.errors" class="invalid-feedback">
+            <div *ngIf="f.phoneNumber.errors.required">phoneNumber is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-holder">
+        <div class="form-group">
+          <label class="control-label form-label">Bio</label>
+          <input type="text" class="form-control form-custom" name="bio" formControlName="bio" [ngClass]="{'is-invalid': submitted && f.bio.errors}"/>
+          <div *ngIf="f.bio.errors" class="invalid-feedback">
+            <div *ngIf="f.bio.errors.required">bio is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label form-label">Group</label>
+          <select formControlName="group" id="group" class="form-control" [ngClass]="{'is-invalid': submitted && f.group.errors}">
+            <option selected>Choose...</option>
+            <option *ngFor="let k of groupNames" [ngValue]="k">{{k}}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" value="submit" type="submit" (click)="register()">SignUp</button>
+    </form>
+  </div>
+</div>

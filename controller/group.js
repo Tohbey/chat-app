@@ -12,13 +12,35 @@ router.get('',async(req,res) => {
     res.status(200).json(groups)
 })
 
+//@desc     getting groups
+//router    GET /
+router.get('/groupNames',async(req,res) => {
+    const groups = await Group.find()
+
+    let groupNames = new Array();
+
+    groups.forEach(element => {
+        groupNames.push(element.groupName)
+    })
+    res.send(groupNames)
+})
+
+router.get('/byName/:groupName',async(req,res) => {
+    const groupName = req.params.groupName
+
+    const group = await Group.findOne({groupName:groupName})
+    if(!group) return res.status(400).send('Group doesnt not exist')
+
+    res.send(group)
+})
+
 //@desc     getting group
 //router    GET :/id
 router.get(':/id',async(req,res) =>{
     const id = req.params.id;
     
     let group = await Group.findById(id);
-    if(!group) return res.status(400).send('User doesnt not exist')
+    if(!group) return res.status(400).send('Group doesnt not exist')
 
     res.send(group);
 })
@@ -33,12 +55,16 @@ router.post('',async(req,res) => {
     group = new Group(_.pick(req.body,[
         'groupName','groupDescription','createdBy'
     ]))
-
+    
     let createdByUser = await User.findOne({username:group.createdBy})
     if(!createdByUser) return res.status(400).send('User does not exist')
+
+    group.users.push(createdByUser._id)
+    createdByUser.groups.push(group)
     
     try{
         group = await group.save()
+        createdByUser = await createdByUser.save()
         winston.info('Group saved')
 
         res.status(200).send(group)

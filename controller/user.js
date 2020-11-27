@@ -3,7 +3,8 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const winston = require('winston');
-const User = require('../model/users')
+const User = require('../model/users');
+const { Group } = require('../model/groups');
 
 //@desc     getting users
 //router    GET /
@@ -14,7 +15,7 @@ router.get('',async(req,res) => {
 
 //@desc     getting user
 //router    GET :/id
-router.get(':/id',async(req,res) =>{
+router.get('/:id',async(req,res) =>{
     const id = req.params.id;
     
     let user = await User.findById(id);
@@ -23,6 +24,27 @@ router.get(':/id',async(req,res) =>{
     res.send(user);
 })
 
+//@desc     getting user
+//router    GET :/username
+router.get('/byUsername/:username',async(req,res) =>{
+    const username = req.params.username;
+    
+    let user = await User.findOne({username:username});
+    if(!user) return res.status(400).send('User doesnt not exist')
+
+    res.send(user);
+})
+
+//@desc     getting user
+//router    GET :/username
+router.get('/byEmail/:email',async(req,res) =>{
+    const email = req.params.email;
+    
+    let user = await User.findOne({email:email});
+    if(!user) return res.status(400).send('User doesnt not exist')
+
+    res.send(user);
+})
 
 //@desc     creating user
 //router    POST /
@@ -37,10 +59,16 @@ router.post('',async(req,res) => {
 
     user = new User(_.pick(req.body,[
         'firstName','lastName','email','password',
-        'address','phoneNumber','bio','username'
+        'address','phoneNumber','bio','username','group'
     ]))
+    
+    console.log(user)
+    const group = await Group.findOne({groupName:user.group})
+    if(!group) return res.status(400).send('group not found')
 
-   user.password = await bcrypt.hash(user.password,salt)
+    user.groups.push(group)
+
+    user.password = await bcrypt.hash(user.password,salt)
 
     try{
         user = await user.save()
@@ -65,13 +93,11 @@ router.put('/:id',async(req,res) => {
     const salt = await bcrypt.genSalt(10)
 
     user.set(_.pick(req.body,[
-        'surname','othernames','email','password',
+        'surname','othernames','email',
         'address','phoneNumber','bio','username'
     ]))
 
-    user.password = await bcrypt.hash(user.password,salt, (err,hash) => {
-        return hash
-    });
+    user.password = await bcrypt(user.password,salt)
 
     try{
         user = await user.save()
@@ -83,14 +109,20 @@ router.put('/:id',async(req,res) => {
 
 //@desc     getting user's groups
 //router    GET userGroup/:id
-router.get('userGroup/:id',async(req,res) => {
+router.get('/userGroup/:id',async(req,res) => {
     const id = req.params.id;
     let user = await User.findById(id);
     if(!user) return res.status(400).send('User doesnt not exist')
 
     let userGroup = user.groups
 
-    res.status(200).send(userGroup)
+    let groupNames = new Array();
+
+    userGroup.forEach(element => {
+        groupNames.push(element.groupName)
+    })
+
+    res.send(groupNames)
 })
 
 module.exports = router

@@ -1,0 +1,62 @@
+<div>
+  <div class="chat-container">
+    <header class="chat-header">
+      <h1><i class="fas fa-smile"></i> Chat App</h1>
+      <div>
+        <p class="btn" style="margin-right: 10px;">Create Group</p>
+        <a routerLink="/login" class="btn">Leave Room</a>
+      </div>
+    </header>
+    <main class="chat-main">
+      <div class="chat-sidebar">
+        <h3><i class="fas fa-comments"></i> Room Name:</h3>
+        <ng-container>
+          <div *ngFor="let group of groups">
+            <h6 id="room-name" (click)="openPage('/chat',group)">{{group}}</h6>
+          </div>
+        </ng-container>
+        <h3><i class="fas fa-users"></i> Users</h3>
+        <ul id="users">
+          <li></li>
+        </ul>
+      </div>
+      <div class="chat-messages">
+
+      </div>
+    </main>
+    <div class="chat-form-container">
+      <form id="chat-form" [formGroup]="chatForm">
+        <input type="text" placeholder="Enter Message" class="form-control form-custom" name="chat" formControlName="chat" [ngClass]="{'is-invalid': submitted && f.chat.errors}"/>
+        <button class="btn" type="submit" value="submit" (click)="postChat()"><i class="fas fa-paper-plane"></i> Send</button>
+      </form>
+    </div>
+  </div>
+  <div class="container">
+    <form id="group-form" [formGroup]="groupForm">
+      <div class="form-holder">
+        <div>
+          <label class="control-label form-label">Group Name</label>
+          <input type="text"  class="form-control form-custom" name="groupName" formControlName="groupName" [ngClass]="{'is-invalid': submitted1 && g.groupName.errors}"/>
+          <div *ngIf="g.groupName.errors" class="invalid-feedback">
+            <div *ngIf="g.groupName.errors.required">password is required</div>
+          </div>
+        </div>
+        <div>
+          <label class="control-label form-label">Group Description</label>
+          <input type="text"  class="form-control form-custom" name="groupDescription" formControlName="groupDescription" [ngClass]="{'is-invalid': submitted1 && g.groupDescription.errors}"/>
+          <div *ngIf="g.groupDescription.errors" class="invalid-feedback">
+            <div *ngIf="g.groupDescription.errors.required">password is required</div>
+          </div>
+        </div>
+        <div>
+          <label class="control-label form-label">Created By</label>
+          <input type="text" class="form-control form-custom" name="createdBy" formControlName="createdBy" [ngClass]="{'is-invalid': submitted1 && g.createdBy.errors}"/>
+          <div *ngIf="g.createdBy.errors" class="invalid-feedback">
+            <div *ngIf="g.createdBy.errors.required">createdBy is required</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-1" (click)="createGroup()">Create</button>
+    </form>
+  </div>
+</div>

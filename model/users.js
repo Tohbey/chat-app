@@ -42,13 +42,18 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true,
-        maxlength:1024,
-        minlength:5
+        maxlength:500,
+        minlength:8
     },
     bio:{
         type:String,
         maxlength:500,
         minlength:10,
+    },
+    group:{
+        type:String,
+        minlength:5,
+        maxlength:50
     },
     role:{
         type:String,

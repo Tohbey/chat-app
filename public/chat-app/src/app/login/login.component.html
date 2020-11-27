@@ -1,0 +1,27 @@
+<div class="container">
+  <p>Welcome to Chat-App</p>
+  <div>
+    <form autocomplete="off" [formGroup]="loginForm">
+      <div class="form-holder">
+        <div class="form-group">
+          <label class="control-label form-label">E-mail</label>
+          <input type="text" placeholder="error@example.com" class="form-control form-custom" name="email" formControlName="email" [ngClass]="{'is-invalid': submitted && f.email.errors}"/>
+          <div *ngIf="f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors.required">email is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label form-label">Password</label>
+          <input type="password" placeholder="*******" class="form-control form-custom" name="password" formControlName="password" [ngClass]="{'is-invalid': submitted && f.password.errors}"/>
+          <div *ngIf="f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">password is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-holder">
+        <button class="btn" value="submit" type="submit" (click)="chatRoom()">Login</button>
+        <button class="btn" value="submit" type="submit" (click)="signUp()">SignUp</button>
+      </div>
+    </form>
+  </div>
+</div>
