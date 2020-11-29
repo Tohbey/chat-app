@@ -19,12 +19,9 @@
     "@angular/platform-browser": "~9.0.3",
     "@angular/platform-browser-dynamic": "~9.0.3",
     "@angular/router": "~9.0.3",
-    "@types/socket.io-client": "^1.4.34",
-    "angular-socket-io": "^0.7.0",
     "bootstrap": "^4.5.3",
     "rxjs": "~6.5.4",
-    "socket-io": "^1.0.0",
-    "socket.io-client": "^2.1.1",
+    "socket.io-client": "3.0.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

@@ -68,10 +68,13 @@ router.post('',async(req,res) => {
 
     user.groups.push(group)
 
+    group.users.push(user._id)
+
     user.password = await bcrypt.hash(user.password,salt)
 
     try{
         user = await user.save()
+        group = await group.save()
         winston.info('User saved')
 
         const token = user.generateAuthToken()

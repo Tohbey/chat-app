@@ -19,10 +19,10 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "mongoose": "^5.10.15",
+    "mongodb": "^2.2.33",    
+    "body-parse": "^0.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6",
-    "react-router-dom": "^5.2.0",
     "socket.io": "^3.0.3",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.5"

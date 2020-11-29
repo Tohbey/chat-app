@@ -3,7 +3,7 @@
     <header class="chat-header">
       <h1><i class="fas fa-smile"></i> Chat App</h1>
       <div>
-        <p class="btn" style="margin-right: 10px;">Create Group</p>
+        <p class="btn" style="margin-right: 10px;" (click)="displayForm()">Create Group</p>
         <a routerLink="/login" class="btn">Leave Room</a>
       </div>
     </header>
@@ -12,12 +12,15 @@
         <h3><i class="fas fa-comments"></i> Room Name:</h3>
         <ng-container>
           <div *ngFor="let group of groups">
-            <h6 id="room-name" (click)="openPage('/chat',group)">{{group}}</h6>
+            <h6 id="room-name"><a routerLink="/chat/{{group}}" target="_blank"
+              style="color: white;">{{group}}</a></h6>
           </div>
         </ng-container>
         <h3><i class="fas fa-users"></i> Users</h3>
         <ul id="users">
-          <li></li>
+          <div *ngFor="let user of ListOfUsers">
+            <li>{{user}}</li>
+          </div>
         </ul>
       </div>
       <div class="chat-messages">
@@ -31,7 +34,7 @@
       </form>
     </div>
   </div>
-  <div class="container">
+  <div class="container" id="container" style="display:none;">
     <form id="group-form" [formGroup]="groupForm">
       <div class="form-holder">
         <div>

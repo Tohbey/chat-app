@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { User } from '../models/users';
+import { APIs } from './APIs';
 import { UsersService } from './users/users.service';
 
 @Injectable({
@@ -10,7 +11,7 @@ import { UsersService } from './users/users.service';
 })
 
 export class AuthService {
-  private authUrl = 'http://localhost:3000/auth';
+  private authUrl = APIs.authUrl;
 
   constructor(private http: HttpClient,private userService:UsersService) { }
 

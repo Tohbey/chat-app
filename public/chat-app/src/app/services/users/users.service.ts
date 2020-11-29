@@ -3,6 +3,7 @@ import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {  User } from '../../models/users'
+import { APIs } from '../APIs';
 
 
 
@@ -11,7 +12,7 @@ import {  User } from '../../models/users'
 })
 export class UsersService {
 
-  private userUrl = 'http://localhost:3000/users';
+  private userUrl = APIs.userUrl;
 
   constructor(private http: HttpClient) { }
 

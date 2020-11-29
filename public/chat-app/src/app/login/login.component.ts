@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
       data => {
         console.log(data)
         localStorage.setItem('x-auth-token',data)
+        localStorage.setItem('user-id',data._id)
         this.getUserDetails(email)
       }
     )

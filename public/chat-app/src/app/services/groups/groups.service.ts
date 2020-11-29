@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Group } from 'src/app/models/groups';
+import { APIs } from '../APIs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
 
-  private groupUrl = 'http://localhost:3000/groups';
+  private groupUrl = APIs.groupUrl;
 
   constructor(private http: HttpClient) { }
 

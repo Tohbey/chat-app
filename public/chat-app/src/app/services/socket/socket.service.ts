@@ -1,24 +1,40 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Message } from '../../models/message';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import * as io from 'socket.io-client';
+import { observable, Observable, throwError } from 'rxjs';
+import { catchError, retry, subscribeOn } from 'rxjs/operators';
+import  {io} from 'socket.io-client';
+import { APIs } from '../APIs';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class SocketService {
 
-  private socket
-  private socketUrl = 'http://localhost:3000';
+  private message:Message
+  // private socket = io('');
+  public socket = io(APIs.mainUrl,{
+    path:"/sio",
+    transports:["websocket"]
+  });
 
   constructor(private http: HttpClient) {
+    this.socket.on("connect",() => {
+      console.log("connected")
+    })
+  }
 
+  listen(){
+    this.socket.on("message",(message) => {
+      console.log(message)
+    })
   }
-  createConnection(){
-    this.socket = io.connect(this.socketUrl);
-    console.log(this.socket)
+
+  emit(eventName:string,message,username,groupName){
+    this.socket.emit(eventName,username,message,groupName)
   }
-  
+
+  // disconnect(){
+
+  // }
 }
