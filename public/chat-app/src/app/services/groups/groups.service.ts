@@ -58,7 +58,7 @@ export class GroupsService {
   }
 
   addingUser(id,userId):Observable<Group>{
-    return this.http.get<Group>(this.groupUrl+"/addingUser"+id+userId)
+    return this.http.get<Group>(this.groupUrl+"/addingUser/"+id+"/"+userId)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -71,9 +71,6 @@ export class GroupsService {
      if(error.error instanceof ErrorEvent){
          //Get client-side error
           errorMessage = error.error.message;
-        }else{
-          //get serve-side error
-          errorMessage = 'Error Code: $(error.status)\n Message:$(error.message)'
         }
         window.alert(errorMessage);
         return throwError(errorMessage);

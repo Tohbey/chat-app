@@ -35,21 +35,32 @@ const appName = "Chat-app"
 
 io.on('connection',socket => {
     console.log('New Ws Connection...')
+    
+    socket.on('joinRoom',({username,room}) => {
 
-    //to the single client connecting
-    socket.emit('message',formateMessage(appName,'Welcome to chat-app!'));
+        socket.join(room);
 
-    //Broadcast when a user connected to all users except that particular user that connected
-    socket.broadcast.emit('message',formateMessage(appName,'A user has joined the chat','group'));
+        //to the single client connecting
+        socket.emit('message',formateMessage(appName,'Welcome to chat-app!',"Main"));
+
+        //Broadcast when a user connected to all users except that particular user that connected
+        socket.broadcast.to(room).emit(
+            'message',formateMessage(appName,`A ${username} has joined the chat`,room
+        ));
+    })
 
     // listen to chat message
     socket.on('chatMessage', (username,msg,groupName) => {
-        io.emit('message',formatMessage(username,msg,groupName))
+        io.to(groupName).emit('message',formatMessage(username,msg,groupName))
+    })
+    
+    // when client disconnet
+    socket.on('disconnect', () => {
+        io.emit('message',formatMessage(appName,'A user has left the chat',"Main"))
     })
 
-    //when client disconnet
-    socket.on('disconnect', () => {
-        io.emit('message',formatMessage(appName,'A user has left the chat'))
+    socket.on('leave', (username,groupName) => {
+        io.to(groupName).emit('message',formatMessage(appName,`${username} has left the chat`,groupName))
     })
 })
 
@@ -58,12 +69,7 @@ const port = 6001
 
 http.listen(port, () => console.error(`listening on http://localhost:${port}`));
 
-// socket.on('joinRoom', ({username , room }) => {
-
-    //to all the clients in general
-    //io.emit()
-
-    //listen to chat message
-    // socket.on('chatMessage', msg => {
-    //     io.emit('message',formatMessage('user',msg))
-    // })
+// socket.join(roomName);
+// socket.to("admin").emit(eventName, Data);
+// socket.join(nodejs);
+// socket.to(“nodejs”).emit(eventName, Data);

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { disconnect } from 'process';
 import { Group } from '../models/groups';
 import { Message } from '../models/message';
 import { User } from '../models/users';
@@ -16,17 +17,19 @@ import { UsersService } from '../services/users/users.service';
 })
 export class ChatappComponent implements OnInit {
 
-  private socket
   chatForm:FormGroup
   groupForm:FormGroup
+  joinGroup:FormGroup
   user:User
   groupInput:Group
   username
+  groupNames:any
   groups
   groupDetail:Group;
   ListOfUsers = new Array();
   submitted =false
   submitted1 = false
+  submitted2 = false
   message:any
   currentGroup
   constructor(
@@ -38,6 +41,7 @@ export class ChatappComponent implements OnInit {
     private activatedRoute: ActivatedRoute) {
       this.chat()
       this.group()
+      this.join()
     }
 
   ngOnInit(): void {
@@ -46,6 +50,7 @@ export class ChatappComponent implements OnInit {
     this.currentGroup = this.activatedRoute.snapshot.url[1].path
     this.listen()
     this.getList(this.currentGroup)
+    this.getgroupNames()
   }
 
   listen(){
@@ -54,12 +59,16 @@ export class ChatappComponent implements OnInit {
       this.outputMessage(message)
     })
   }
+  joinRoom(username,room){
+    this.socketService.socket.emit('joinRoom',{username,room})
+  }
 
   chat(){
     this.chatForm = this.formBuilder.group({
       chat:['',Validators.required]
     })
   }
+
   group(){
     this.groupForm = this.formBuilder.group({
       groupName:['',Validators.required],
@@ -68,9 +77,61 @@ export class ChatappComponent implements OnInit {
     })
   }
 
+  join(){
+    this.joinGroup = this.formBuilder.group({
+      group:['',Validators.required]
+    })
+  }
+
+  get f(){
+    return this.chatForm.controls;
+  }
+
   get g(){
     return this.groupForm.controls;
   }
+
+  get j(){
+    return this.joinGroup.controls;
+  }
+
+  getgroupNames(){
+    let resp = this.groupService.getGroupNames();
+    resp.subscribe((data) => {
+      this.groupNames = data
+      console.log('Groups ',this.groupNames)
+    })
+  }
+
+  joinChat(){
+    this.submitted2 = true
+    if(this.joinGroup.invalid){
+      return
+    }
+    let groupName = this.joinGroup.get('group').value
+    let resp = this.groupService.getGroupByName(groupName)
+    resp.subscribe((data) => {
+      console.log(data)
+      this.addingUser(data._id,this.user._id)
+    })
+  }
+
+  addingUser(groupId,userId){
+    let resp = this.groupService.addingUser(groupId,userId)
+    resp.subscribe((data) => {
+      console.log(data)
+    })
+  }
+
+  exitChat(){
+    this.socketService.socket.emit('leave',this.username,this.currentGroup)
+    this.router.navigate(['/login'])
+  }
+
+  addGroup(){
+    document.getElementById('join').style.display = 'block'
+  }
+
   createGroup(){
     this.submitted1 = true;
     if(this.groupForm.invalid){
@@ -87,10 +148,6 @@ export class ChatappComponent implements OnInit {
 
   displayForm(){
     document.getElementById('container').style.display = 'block'
-  }
-
-  get f(){
-    return this.chatForm.controls;
   }
 
   postChat(){
@@ -126,6 +183,7 @@ export class ChatappComponent implements OnInit {
       this.user = data
       this.username = this.user.username;
       this.groupForm.patchValue({createdBy:this.username})
+      this.joinRoom(this.user.username,this.currentGroup)
       console.log(this.user)
     })
   }
