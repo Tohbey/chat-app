@@ -9,13 +9,15 @@ import { ChatappComponent } from './chatapp/chatapp.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketService } from './services/socket/socket.service';
+import { AdmirComponent } from './admir/admir.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    ChatappComponent
+    ChatappComponent,
+    AdmirComponent
   ],
   imports: [
     BrowserModule,
