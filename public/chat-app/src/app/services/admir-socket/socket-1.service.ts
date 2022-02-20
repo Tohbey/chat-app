@@ -10,7 +10,6 @@ export class Socket1Service {
 
   API = "http://localhost:3000";
   body = {
-    status: 'online',
     location:{
       lat: 6.8,
       long: 7.0 
@@ -18,26 +17,33 @@ export class Socket1Service {
   };
 
   staff = {
-    _id: '61dc97b190545d02895c7721'
+    _id: '61dd6cdf33248a92029184ea'
   }
 
-  entryId = '620def3ac23116451bf18ad4'
+  entryId = '6212bbeb7c46397fec10846b'
 
   public socket = io(this.API, {
     path:"/sio",
     transports:["websocket"]
   })
 
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient) {
+    let id = this.staff._id; 
     this.socket.on('connect', () => {
       console.log("connected")
-    })
+    });
+
+    this.connection()
   }
 
   listen(){
     this.socket.on('message',(msg, data, meta) => {
       console.log(msg, data, meta)
     })
+  }
+
+  connection(){
+    this.socket.emit('login', this.staff._id)
   }
 
   newEntry(){
